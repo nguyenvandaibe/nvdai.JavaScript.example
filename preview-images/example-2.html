@@ -44,6 +44,44 @@
 
         document.querySelector('#file-input').addEventListener("change", previewImages);
     </script>
+    
+    <script>
+        previewMedia(event) {
+            var files = event.target.files; // FileList không phải mảng
+
+            var panel = document.querySelector("#preview-panel");
+
+            if (files) {
+                this.hasMedia = true;
+                Array.from(files).forEach((file) => {
+                    this.addMediaToPrevlew(file, panel);
+                });
+            } else {
+                this.hasMedia = false;
+            }
+        },
+
+        addMediaToPrevlew(file, panel) {
+            // // Make sure `file.name` matches our extensions criteria
+            if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                return alert(file.name + " is not an image");
+            } // else...
+
+            var reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                var image = new Image();
+                image.height = 100;
+                image.title = file.name;
+                image.style.paddingBottom = '8px';
+                image.style.paddingRight = '8px';
+                image.src = this.result;
+                panel.appendChild(image);
+            });
+
+            reader.readAsDataURL(file);
+        },
+    </script>
 </body>
 
 </html>
